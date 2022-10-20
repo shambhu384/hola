@@ -1,0 +1,5 @@
+framework:
+    http_client:
+        scoped_clients:
+            ntfy.client:
+                scope: 'https://ntfy.sh'
