@@ -88,6 +88,7 @@ class DashboardController extends AbstractDashboardController
         
         yield MenuItem::section('Investment');
 
+        yield MenuItem::linkToCrud('Events', 'fa fa-tags', Entity\Event::class);
 
         yield MenuItem::section('Development');
         yield MenuItem::linkToCrud('Request for Comments', 'fas fa-list', Entity\Rfc::class);

@@ -24,6 +24,12 @@ class ExpenseCategory
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Expense::class)]
     private Collection $expenses;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $budgetEstimate = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $occurrence = null;
+
     public function __construct()
     {
         $this->expenses = new ArrayCollection();
@@ -91,5 +97,29 @@ class ExpenseCategory
     public function __toString(): string
     {
         return $this->name;
+    }
+
+    public function getBudgetEstimate(): ?int
+    {
+        return $this->budgetEstimate;
+    }
+
+    public function setBudgetEstimate(int $budgetEstimate): self
+    {
+        $this->budgetEstimate = $budgetEstimate;
+
+        return $this;
+    }
+
+    public function getOccurrence(): ?string
+    {
+        return $this->occurrence;
+    }
+
+    public function setOccurrence(string $occurrence): self
+    {
+        $this->occurrence = $occurrence;
+
+        return $this;
     }
 }

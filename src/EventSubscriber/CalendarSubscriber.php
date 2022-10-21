@@ -6,6 +6,7 @@ use App\Controller\Admin\ExpenseCrudController;
 use CalendarBundle\Entity\Event;
 use CalendarBundle\CalendarEvents;
 use App\Repository\ExpenseRepository;
+use App\Repository\EventRepository;
 use CalendarBundle\Event\CalendarEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -13,7 +14,12 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CalendarSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private UrlGeneratorInterface $router, private ExpenseRepository $expenseRepository, private AdminUrlGenerator $adminUrlGenerator){}
+	public function __construct(
+		private UrlGeneratorInterface $router,
+		private ExpenseRepository $expenseRepository,
+		private EventRepository $eventRepository,
+		private AdminUrlGenerator $adminUrlGenerator
+	){}
 
     public static function getSubscribedEvents()
     {
@@ -26,14 +32,29 @@ class CalendarSubscriber implements EventSubscriberInterface
     {
         $start = $calendar->getStart();
         $end = $calendar->getEnd();
-        $filters = $calendar->getFilters();
+	$filters = $calendar->getFilters();
+
+	$events = $this->eventRepository->findByDates($start, $end);
+	foreach($events as $event) {
+		$bookingEvent = new Event(
+			$event->getName(),
+                	$event->getEventDate()
+            );
+    
+            $bookingEvent->setOptions([
+                'backgroundColor' => 'rgba(211, 0, 109, 0.8)',
+                'borderColor' => 'rgba(75, 192, 192, 0.2)',
+            ]);
+
+            $calendar->addEvent($bookingEvent);
+	}
 
         $expenses = $this->expenseRepository->findByDates($start, $end);
 
         foreach($expenses as $expense) {
 
             $bookingEvent = new Event(
-                sprintf('%s %d', $expense->getCategory()->getFaIcon(), $expense->getAmount()),
+                sprintf('%s %d', $expense->getCategory()->getName(), ($expense->getAmount() / 100)),
                 $expense->getDateOfPayment()
             );
     
