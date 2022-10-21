@@ -9,7 +9,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityUpdatedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
 
-class EasyAdminSubscriber implements EventSubscriberInterface
+class RfcSubscriber implements EventSubscriberInterface
 {
     public function __construct(private HttpClientInterface $ntfyClient, private Security $security) {}
 

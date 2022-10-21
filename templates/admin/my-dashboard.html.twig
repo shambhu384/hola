@@ -3,40 +3,33 @@
 
 {% block content_title %}Dashboard{% endblock %}
 {% block page_actions %}
-    <a class="btn btn-primary" href="...">Some Action</a>
+      {% set url = ea_url()
+    .setController('App\\Controller\\Admin\\ExpenseCrudController')
+    .setAction('new') %}
+    <a class="btn btn-primary " href="{{ url }}"><i class="fa-fw fa fa-solid fa-hand-holding-dollar"></i> Add Expense</a>
 {% endblock %}
 
 {% block main %}
-<div>
-    I created this UX component because
-    <span {{ stimulus_controller('symfony/ux-typed', {
-        strings: ['I ❤ Symfony UX', 'Symfony UX is great', 'Symfony UX is easy'],
-        smartBackspace: true,
-        startDelay: 100,
-        backSpeed: 20,
-        backDelay: 100,
-        loop: true,
-        showCursor: true,
-        cursorChar: '✨'
-    }) }}></span>
-</div>
+    <div>
+        I created this UX component because
+        <span {{ stimulus_controller('symfony/ux-typed', {
+            strings: ['I ❤ Symfony UX', 'Symfony UX is great', 'Symfony UX is easy'],
+            smartBackspace: true,
+            startDelay: 100,
+            backSpeed: 20,
+            backDelay: 100,
+            loop: true,
+            showCursor: true,
+            cursorChar: '✨'
+        }) }}></span>
+    </div>
 
     <div class="row">
         <div class="col-md-12">
-            {# {{ component('live_booking', { min: 5, max: 500 }) }} #}
-
-            <div class="card">
-                <div class="card-body">
-                    {# {{ render_chart(chart) }} #}
-                </div>
-            </div>
+            {{ render_chart(chart) }}
         </div>
         <div class="col-md-12 mt-4">
-            <div class="card">
-                <div class="card-body">
-                    <div id="calendar-holder"></div>
-                </div>
-            </div>
+            <div id="calendar-holder"></div>
         </div>
-        </div>
+    </div>
 {% endblock %}

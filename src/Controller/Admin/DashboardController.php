@@ -5,6 +5,8 @@ namespace App\Controller\Admin;
 use App\Entity;
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Symfony\UX\Chartjs\Model\Chart;
+use App\Repository\ExpenseRepository;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,6 +25,7 @@ class DashboardController extends AbstractDashboardController
     public function __construct(
 		private ChartBuilderInterface $chartBuilder,
 		private readonly UserRepository $userRepository,
+        private readonly ExpenseRepository $expenseRepository,
 		private readonly RequestStack $requestStack,
 		private readonly Security $security,
 	) {}
@@ -30,7 +33,42 @@ class DashboardController extends AbstractDashboardController
     #[Route('/admin', name: 'admin_dashboard')]
     public function index(): Response
     {
-        return $this->render('admin/my-dashboard.html.twig', []);
+        $chart = $this->chartBuilder->createChart(Chart::TYPE_LINE);
+        $chart->setData([
+            'labels' => ['Jan', 'Feb', 'March', 'April', 'May', 'June'],
+            'datasets' => [
+                [
+                    'label' => 'Investment 🍪',
+                    'backgroundColor' => 'rgba(75, 192, 192, 0.2)',
+					'borderColor' => 'green',
+					'borderWidth' => 1,
+                    'data' => [10500, 20500, 30500, 40500, 50500, 60500]
+                ],
+                [
+                    'label' => 'Expense 🏃‍♀️',
+                    'borderWidth' => 1,
+					'backgroundColor' => 'rgba(255, 99, 132, 0.2)',
+					'borderColor' => 'red',
+                    'data' => [45000, 32800, 43000, 34000, 39000, 42000]
+                ],
+                [
+                    'label' => 'Exempted Expense 🏃‍♀️',
+                    'borderWidth' => 1,
+					'backgroundColor' => 'black',
+					'borderColor' => 'rgb(75, 192, 192)',
+                    'data' => [40000, 32000, 41000, 39000, 38000,38000, 52000, 34000, 36520, 34520, 45000, 37000, 46000, 44000]
+                ],
+                [
+                    'label' => 'Income 🍪',
+                    'backgroundColor' => 'purple',
+					'borderColor' => 'rgb(75, 192, 192)',
+					'borderWidth' => 1,
+                    'data' => [97850, 97850, 97850, 97850, 97850, 97850, 97850, 97850, 110000]
+                ],
+            ]
+        ]);
+
+        return $this->render('admin/my-dashboard.html.twig', ['chart' => $chart]);
     }
 
     public function configureDashboard(): Dashboard
@@ -41,10 +79,18 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        // yield MenuItem::linkToCrud('User', 'fas fa-list', Entity\User::class);
-        yield MenuItem::linkToCrud('Request for Comments', 'fas fa-list', Entity\Rfc::class);
+        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-solid fa-chart-line');
+        yield MenuItem::section('Expense Managment');
+        yield MenuItem::linkToCrud('Add Expense', 'fa fa-solid fa-hand-holding-dollar', Entity\Expense::class)->setAction('new');
 
+        yield MenuItem::linkToCrud('Expenses', 'fa fa-sharp fa-cart-shopping', Entity\Expense::class)->setDefaultSort(['dateOfPayment' => 'DESC']);
+        yield MenuItem::linkToCrud('Expense Categories', 'fa fa-tags', Entity\ExpenseCategory::class);
+        
+        yield MenuItem::section('Investment');
+
+
+        yield MenuItem::section('Development');
+        yield MenuItem::linkToCrud('Request for Comments', 'fas fa-list', Entity\Rfc::class);
     }
 
     public function configureAssets(): Assets
