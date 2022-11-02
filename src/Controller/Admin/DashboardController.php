@@ -86,12 +86,19 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Expenses', 'fa fa-sharp fa-cart-shopping', Entity\Expense::class)->setDefaultSort(['dateOfPayment' => 'DESC']);
         yield MenuItem::linkToCrud('Expense Categories', 'fa fa-tags', Entity\ExpenseCategory::class);
         
-        yield MenuItem::section('Investment');
+        yield MenuItem::section('Income AND Investment');
 
-        yield MenuItem::linkToCrud('Events', 'fa fa-tags', Entity\Event::class);
+        //<i class="fa-solid fa-piggy-bank"></i><i class="fa-solid fa-calendar-days"></i>
+        yield MenuItem::linkToCrud('Investment', 'fa fa-wallet', Entity\Investment::class)->setDefaultSort(['amount' => 'DESC']);;
+        yield MenuItem::linkToCrud('Events', 'fa fa-calendar-days', Entity\Event::class)->setDefaultSort(['eventDate' => 'DESC']);
+        yield MenuItem::linkToCrud('Income', 'fa fa-wallet', Entity\Income::class)->setDefaultSort(['dateOfCredit' => 'DESC']);
 
         yield MenuItem::section('Development');
         yield MenuItem::linkToCrud('Request for Comments', 'fas fa-list', Entity\Rfc::class);
+        yield MenuItem::linkToCrud('Notification', 'fas fa-bell', Entity\Notification::class);
+        yield MenuItem::linkToCrud('Tags', 'fas fa-tags', Entity\Tag::class);
+
+
     }
 
     public function configureAssets(): Assets
