@@ -92,6 +92,7 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Development');
         yield MenuItem::linkToCrud('Request for Comments', 'fas fa-list', Entity\Rfc::class);
+        yield MenuItem::linkToCrud('Request for Comments', 'fas fa-list', Entity\Product::class);
     }
 
     public function configureAssets(): Assets
