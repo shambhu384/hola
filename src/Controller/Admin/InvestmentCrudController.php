@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Investment;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
@@ -12,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\PercentField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
+use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class InvestmentCrudController extends AbstractCrudController
@@ -21,6 +23,14 @@ class InvestmentCrudController extends AbstractCrudController
         return Investment::class;
     }
 
+    public function configureCrud(Crud $crud): Crud
+    {
+        return Crud::new()
+            ->setHelp('index', '...')
+            ->overrideTemplate('crud/index', 'admin/crud/index.html.twig')
+        ;
+    }
+    
     public function configureFilters(Filters $filters): Filters
     {
         return $filters
@@ -131,5 +141,12 @@ class InvestmentCrudController extends AbstractCrudController
             IntegerField::new('interestGain'),
             TextField::new('reference'),
         ];
+    }
+
+
+    public function configureResponseParameters(KeyValueStore $responseParameters): KeyValueStore
+    {
+        $responseParameters->set('testtesttest', '123xyz');
+        return $responseParameters;
     }
 }

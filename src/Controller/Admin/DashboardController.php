@@ -3,14 +3,12 @@
 namespace App\Controller\Admin;
 
 use App\Entity;
-use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\UX\Chartjs\Model\Chart;
 use App\Repository\ExpenseRepository;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Asset;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use Symfony\Component\HttpFoundation\RequestStack;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
