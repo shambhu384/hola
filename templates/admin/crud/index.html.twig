@@ -84,7 +84,7 @@
 
 {% block main %}
 
-    <p>{{ testtesttest }}</p>
+    <p>{{ render_chart(chart) }}</p>
     {# sort can be multiple; let's consider the sorting field the first one #}
     {% set sort_field_name = app.request.get('sort')|keys|first %}
     {% set sort_order = app.request.get('sort')|first %}

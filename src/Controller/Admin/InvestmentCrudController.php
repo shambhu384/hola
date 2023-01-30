@@ -3,12 +3,14 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Investment;
+use Symfony\UX\Chartjs\Model\Chart;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\PercentField;
@@ -18,6 +20,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class InvestmentCrudController extends AbstractCrudController
 {
+    public function __construct(private ChartBuilderInterface $chartBuilder)
+    {
+        
+    }
+
     public static function getEntityFqcn(): string
     {
         return Investment::class;
@@ -64,7 +71,9 @@ class InvestmentCrudController extends AbstractCrudController
 
         if ($pageName == 'index') {
             return [
-                TextField::new('name'),
+                TextField::new('name')
+                    ->setTemplatePath('admin/field/linkedit.html.twig')
+                ,
                 ChoiceField::new('investmentOption')->setChoices([
                     'Equity' => 'equity',
                     'Mutal Fund' => 'mutalfund',
@@ -146,7 +155,32 @@ class InvestmentCrudController extends AbstractCrudController
 
     public function configureResponseParameters(KeyValueStore $responseParameters): KeyValueStore
     {
-        $responseParameters->set('testtesttest', '123xyz');
+
+        $chart = $this->chartBuilder->createChart(Chart::TYPE_BAR);
+
+        $chart->setData([
+            'labels' => ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            'datasets' => [
+                [
+                    'label' => 'My First dataset',
+                    'backgroundColor' => 'rgb(255, 99, 132)',
+                    'borderColor' => 'rgb(255, 99, 132)',
+                    'data' => [0, 10, 5, 2, 20, 30, 45],
+                ],
+            ],
+        ]);
+
+        $chart->setOptions([
+            'scales' => [
+                'y' => [
+                    'suggestedMin' => 0,
+                    'suggestedMax' => 50,
+                ],
+            ],
+        ]);
+
+
+        $responseParameters->set('chart', $chart);
         return $responseParameters;
     }
 }

@@ -1,0 +1,6 @@
+{# admin/field/linkedit.html.twig #}
+{% set editUrl = ea_url()
+                    .setController(ea.crud.controllerFqcn)
+                    .setAction('detail')
+                    .setEntityId(entity.primaryKeyValue) %}
+<a href="{{ editUrl }}" id="Edit_{{ entity.primaryKeyValueAsString }}">{{ field.value }}</a>
